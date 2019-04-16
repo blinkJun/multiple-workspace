@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const _ = require('lodash')
 const baseViewsPath = "./src/views/"
 const viewsPath = path.resolve(__dirname, baseViewsPath );
 function readDirHtmlListSync(path) {
@@ -36,14 +36,23 @@ function readDirHtmlListSync(path) {
 
 let htmlList = readDirHtmlListSync(viewsPath);
 
+const beseHmtlWebpackPluginOptions = {
+    favicon:path.resolve(__dirname,'./favicon.ico'),
+    meta:{
+        'apple-mobile-web-app-capable':{
+            content:'yes'
+        },
+    }
+}
+
 // 各个html的htmlwebpackPlugin配置
 const viewsHtmlWebpackPluginOptions = {
-    index:{
+    index:Object.assign(_.cloneDeep(beseHmtlWebpackPluginOptions),{
         chunks:['index']
-    },
-    app:{
+    }),
+    app:Object.assign(_.cloneDeep(beseHmtlWebpackPluginOptions),{
         chunks:['app']
-    }
+    })
 }
 
 // 遍历baseViewsPath下的所有html文件，将html文件和上面的配置组合输出到webpack配置

@@ -1,3 +1,6 @@
 import '../style/index.scss'
+import config from "../modules/js/config"
 
-console.log(132)
+console.log(config.host)
+const host = config.host
+const hostApi:string ="123"

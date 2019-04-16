@@ -20,7 +20,8 @@ module.exports = merge(common, {
                         {
                             loader:'postcss-loader'
                         }
-                    ]
+                    ],
+                    publicPath:'../'
                 })
             },
             // scss
@@ -38,7 +39,8 @@ module.exports = merge(common, {
                         {
                             loader: 'sass-loader',
                         }
-                    ]
+                    ],
+                    publicPath:'../'
                 })
             },
         ]

@@ -35,23 +35,7 @@ module.exports = merge(common, {
     ],
     module:{
         rules:[
-            // 处理样式文件
-            // css
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader:'postcss-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                    }
-                ]
-            },
-            // scss
+            // scss 处理和通用配置混合后会导致重复混合，发生打包错误
             {
                 test: /\.scss$/,
                 use: [
