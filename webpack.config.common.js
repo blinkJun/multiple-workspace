@@ -1,12 +1,9 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const viewsHtmlWebpackPluginList = require('./views.config.js'); 
+const {entry,viewsHtmlWebpackPluginList} = require('./views.config.js'); 
 module.exports = {
-    entry: {
-        index: './src/scripts/index.ts',
-        app:'./src/scripts/app.ts'
-    },
+    entry,
     output: {
         filename: 'js/[name].[hash].js',
         path: __dirname + '/dist'
@@ -16,7 +13,7 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js"],
         // 引入文件时可以使用的别名
         alias:{
-            '@':path.resolve(__dirname, './src/'),
+            '@':path.resolve(__dirname, './src'),
         }
     },
     plugins:[

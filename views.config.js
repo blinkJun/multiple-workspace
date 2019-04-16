@@ -2,41 +2,56 @@ const fs = require("fs")
 const path = require("path")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const _ = require('lodash')
-const baseViewsPath = "./src/views/"
-const viewsPath = path.resolve(__dirname, baseViewsPath );
-function readDirHtmlListSync(path) {
-    var pa = fs.readdirSync(path);
+
+const basePagesDir = "./src/pages"
+
+const pagesDirPath = path.resolve( __dirname, basePagesDir );
+function readDirHtmlListSync(pagesDirPath) {
+    var pages = fs.readdirSync(pagesDirPath);
     var htmlList = []
     // 循环遍历当前的文件以及文件夹
-    pa.forEach(function (ele, index) {
-        var info = fs.statSync(path + "\\" + ele)
+    pages.forEach(function (ele, index) {
+        const pageDirPath = pagesDirPath + "\\" + ele
+        var info = fs.statSync(pageDirPath)
         if (info.isDirectory()) {
-            // 暂不处理深层文件夹内的文件
-            readDirSync(path + "\\" + ele);
-        } else {
-            var filePath = path + '\\' + ele;
-            // 找到 .html文件
-            let fileNameReg = /\.html|\.htm/g;
-            let shouldFormat = fileNameReg.test(filePath);
-            if (shouldFormat) {
-                // 将拿到的html路径推送到列表
-                htmlList.push({
-                    path:filePath,
-                    filename:ele
+            const pageDirFileList = fs.readdirSync(pageDirPath);
+            let chunksPaths = pageDirFileList.filter(item=>/\.js|\.ts/g.test(item))
+            let htmlPaths  = pageDirFileList.filter(item=>/\.html|\.htm/g.test(item))
+            let pageInfo = {};
+            if(chunksPaths.length>0){
+                pageInfo.chunks=chunksPaths.map(item=>{
+                    let nameItems =  item.split('.')
+                    nameItems.reverse().shift()
+                    const name  = nameItems.join('')
+                    return {
+                        name:name,
+                        path:pageDirPath+'\\'+item
+                    }
                 })
             }
+            if(htmlPaths.length>0){
+                const htmlIndex = htmlPaths[0]
+                let pageNameItems =  htmlIndex.split('.')
+                pageNameItems.reverse().shift()
+                const pageName  = pageNameItems.join('')
+                pageInfo.html={
+                    name:htmlIndex,
+                    pageName:pageName,
+                    path:pageDirPath+'\\'+htmlIndex,
+                }
+            }
+            htmlList.push(pageInfo)
         }
     })
     // 将html文件路径立碑进行返回
     return htmlList
 }
+// 所有页面的脚本和html信息
+let htmlList = readDirHtmlListSync(pagesDirPath);
 
 
-
-
-let htmlList = readDirHtmlListSync(viewsPath);
-
-const beseHmtlWebpackPluginOptions = {
+// 默认htmlWebpackPlugin配置
+const beseHtmlWebpackPluginOptions = {
     favicon:path.resolve(__dirname,'./favicon.ico'),
     meta:{
         'apple-mobile-web-app-capable':{
@@ -45,27 +60,42 @@ const beseHmtlWebpackPluginOptions = {
     }
 }
 
-// 各个html的htmlwebpackPlugin配置
+// 各个html页面可扩展的htmlwebpackPlugin配置
 const viewsHtmlWebpackPluginOptions = {
-    index:Object.assign(_.cloneDeep(beseHmtlWebpackPluginOptions),{
-        chunks:['index']
-    }),
-    app:Object.assign(_.cloneDeep(beseHmtlWebpackPluginOptions),{
-        chunks:['app']
-    })
+    index:{
+        meta:{
+            'apple-mobile-web-app-capable':{
+                content:'noo'
+            },
+        }
+    },
+    app:{
+        meta:{
+            'apple-mobile-web-app-capable':{
+                content:'no'
+            },
+        }
+    }
 }
 
+
+// 输出page下所有的入口文件
 // 遍历baseViewsPath下的所有html文件，将html文件和上面的配置组合输出到webpack配置
+let entry = {}
 const viewsHtmlWebpackPluginList = htmlList.map(item=>{
-    let nameItems =  item.filename.split('.')
-    nameItems.reverse().shift()
-    const name  = nameItems.join('')
+    const pageName = item.html.pageName
+    item.chunks.forEach(item=>entry[item.name]=item.path)
     return new HtmlWebpackPlugin(Object.assign({
-        template:baseViewsPath+item.filename,
-        filename:item.filename,
-        chunks:[''],
-    },viewsHtmlWebpackPluginOptions[name]||{}))
+        template:item.html.path,
+        filename:item.html.name,
+        chunks:item.chunks.map(item=>item.name),
+    },Object.assign(
+        _.cloneDeep(beseHtmlWebpackPluginOptions),
+        viewsHtmlWebpackPluginOptions[pageName]||{}
+    )))
 })
 
-
-module.exports = viewsHtmlWebpackPluginList
+module.exports = {
+    viewsHtmlWebpackPluginList,
+    entry
+}

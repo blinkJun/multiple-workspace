@@ -20,7 +20,7 @@ module.exports = merge(common, {
     },
     devServer:{
         // 告诉服务器从哪里提供内容,默认情况下，将使用当前工作目录作为提供内容的目录，但是你可以修改为其他目录：
-        contentBase: './src/views/',
+        contentBase: './src/pages/',
         hot: true,
         host: locationIp ,
         watchContentBase: true
