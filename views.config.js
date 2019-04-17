@@ -43,7 +43,7 @@ function readDirHtmlListSync(pagesDirPath) {
             htmlList.push(pageInfo)
         }
     })
-    // 将html文件路径立碑进行返回
+    // 将html文件路径进行返回
     return htmlList
 }
 // 所有页面的脚本和html信息
@@ -54,9 +54,11 @@ let htmlList = readDirHtmlListSync(pagesDirPath);
 const beseHtmlWebpackPluginOptions = {
     favicon:path.resolve(__dirname,'./favicon.ico'),
     meta:{
-        'apple-mobile-web-app-capable':{
+        'a':{
+            name:'apple-mobile-web-app-capable',
             content:'yes'
         },
+
     }
 }
 
@@ -64,14 +66,16 @@ const beseHtmlWebpackPluginOptions = {
 const viewsHtmlWebpackPluginOptions = {
     index:{
         meta:{
-            'apple-mobile-web-app-capable':{
-                content:'noo'
+            'a':{
+                name:'apple-mobile-web-app-capable',
+                content:'no'
             },
         }
     },
     app:{
         meta:{
-            'apple-mobile-web-app-capable':{
+            'a':{
+                name:'apple-mobile-web-app-capable',
                 content:'no'
             },
         }

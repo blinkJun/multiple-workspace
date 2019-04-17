@@ -1,3 +1,1 @@
-import "./index.scss"
-
-console.log(222)
+import * as _ from 'lodash'

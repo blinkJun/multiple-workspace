@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const {entry,viewsHtmlWebpackPluginList} = require('./views.config.js'); 
 module.exports = {
     entry,
@@ -26,6 +27,8 @@ module.exports = {
                 to:'./'
             }
         ]),
+        // 禁用ts-loader的类型检查，启用单独的进程进行类型检查
+        new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
         ...viewsHtmlWebpackPluginList,
     ],
     module: {
@@ -48,7 +51,24 @@ module.exports = {
             // 处理脚本文件
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader'
+                use: [
+                    { loader: 'cache-loader' },
+                    {
+                        loader: 'thread-loader',
+                        options: {
+                            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                            workers: require('os').cpus().length - 1,
+                        },
+                    },
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true,
+                            happyPackMode: true // IMPORTANT! use happyPackMode mode to speed-up compilation and reduce errors reported to webpack
+                        }
+                    }
+                ],
+                exclude: /node_modules/,
             },
             // 处理图片资源
             {
@@ -85,14 +105,7 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            // 处理html内资源
-            // {
-            //     test: /\.html$/,
-            //     use: {
-            //         loader: 'html-loader'
-            //     }
-            // }
+            }
         ]
     }
 }
