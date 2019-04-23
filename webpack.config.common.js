@@ -103,6 +103,18 @@ module.exports = {
         new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
         ...viewsHtmlWebpackPluginList,
     ],
+    // 打包分离来自node_modules的第三方包
+    // optimization:{
+    //     splitChunks:{
+    //         cacheGroups: {
+    //             commons: {
+    //                 test: /[\\/]node_modules[\\/]/,
+    //                 name: "vendors",
+    //                 chunks: "all"
+    //             }
+    //         }
+    //     }
+    // },
     module: {
         rules: [
             // css
