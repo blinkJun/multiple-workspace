@@ -1,27 +1,30 @@
 const fs = require("fs");
+const path = require('path')
 
 const gulp = require("gulp");
 const spritesmith = require('gulp.spritesmith');
 
-const sptieDir = './src/sprites/'
-const outPut = {
-    image:'./src/images',
-    scss:'./src/style'
-}
+const {sprites} = require('./views.config')
+const sptieDir = sprites.entry
+const outPut = sprites.outPut
+const template = sprites.template
+const baseImagesPath = sprites.baseImagesPath
 
 // 合并图片
 gulp.task('sprite', function (done) {
     let files = fs.readdirSync(sptieDir)
     files.forEach((spriteName) => {
-        let fileStat = fs.statSync(sptieDir + spriteName)
+        const spritePath = path.resolve(sptieDir,spriteName)
+        let fileStat = fs.statSync(spritePath)
         if (fileStat.isDirectory()) {
-            var spriteData = gulp.src(sptieDir + spriteName + '/*.png').pipe(spritesmith({
+            const spriteFragments = spritePath+'/*.png';
+            var spriteData = gulp.src(spriteFragments).pipe(spritesmith({
                 imgName: spriteName + '.png',
                 cssName: '\_' + spriteName + '.scss',
-                cssTemplate: 'scss.template.mustache',
+                cssTemplate: template ,
                 cssOpts: {
                     url: 'spriteUrl',
-                    picUrl: '@/images/'
+                    picUrl: baseImagesPath
                 },
                 algorithm: "binary-tree",
                 cssFormat: 'scss',
