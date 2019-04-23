@@ -8,6 +8,19 @@
 
 ### 使用方式
 
+#### 修改为自己的git目录
+
+##### 下载裸版本库
+    git clone --bare git://github.com/username/project.git
+##### 推送到自己创建的版本库
+    cd project.git
+    git push --mirror git@gitcafe.com/username/newproject.git
+##### 删除本地代码
+    cd ..
+    rm -rf project.git
+##### 下载自己创建的版本库
+    git clone git@gitcafe.com/username/newproject.git
+
 #### 启动开发环境
 `npm run serve`
 
