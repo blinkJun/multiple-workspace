@@ -21,6 +21,11 @@
 ##### 下载自己创建的版本库
     git clone git@gitcafe.com/username/newproject.git
 
+#### 或者在推送前把推送的目标地址改为自己的仓库地址
+    git remote set-url origin git@gitcafe.com/username/newproject.git
+ 
+
+
 #### 启动开发环境
 `npm run serve`
 
