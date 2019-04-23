@@ -1,8 +1,80 @@
 const path = require('path');
+const fs = require("fs")
+const _ = require('lodash');
+
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const {entry,viewsHtmlWebpackPluginList} = require('./views.config.js'); 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// 页面配置
+const {
+    pagesDirPath,
+    baseHtmlWebpackPluginOptions,
+    viewsHtmlWebpackPluginOptions
+} = require('./views.config.js'); 
+
+
+function readDirHtmlListSync(pagesDirPath) {
+    var pages = fs.readdirSync(pagesDirPath);
+    var htmlList = []
+    // 循环遍历当前的文件以及文件夹
+    pages.forEach(function (ele, index) {
+        const pageDirPath = pagesDirPath + "\\" + ele
+        var info = fs.statSync(pageDirPath)
+        if (info.isDirectory()) {
+            const pageDirFileList = fs.readdirSync(pageDirPath);
+            let chunksPaths = pageDirFileList.filter(item=>/\.js|\.ts/g.test(item))
+            let htmlPaths  = pageDirFileList.filter(item=>/\.html|\.htm/g.test(item))
+            let pageInfo = {};
+            if(chunksPaths.length>0){
+                pageInfo.chunks=chunksPaths.map(item=>{
+                    let nameItems =  item.split('.')
+                    nameItems.reverse().shift()
+                    const name  = nameItems.join('')
+                    return {
+                        name:name,
+                        path:pageDirPath+'\\'+item
+                    }
+                })
+            }
+            if(htmlPaths.length>0){
+                const htmlIndex = htmlPaths[0]
+                let pageNameItems =  htmlIndex.split('.')
+                pageNameItems.reverse().shift()
+                const pageName  = pageNameItems.join('')
+                pageInfo.html={
+                    name:htmlIndex,
+                    pageName:pageName,
+                    path:pageDirPath+'\\'+htmlIndex,
+                }
+            }
+            htmlList.push(pageInfo)
+        }
+    })
+    // 将html文件路径进行返回
+    return htmlList
+}
+// 所有页面的脚本和html信息
+let htmlList = readDirHtmlListSync(pagesDirPath);
+// 输出page下所有的入口文件
+let entry = {}
+// 遍历baseViewsPath下的所有html文件，将html文件和上面的配置组合输出到webpack配置
+const viewsHtmlWebpackPluginList = htmlList.map(item=>{
+    const pageName = item.html.pageName
+    item.chunks.forEach(item=>entry[item.name]=item.path)
+    return new HtmlWebpackPlugin(Object.assign({
+        template:item.html.path,
+        filename:item.html.name,
+        chunks:item.chunks.map(item=>item.name),
+    },Object.assign(
+        _.cloneDeep(baseHtmlWebpackPluginOptions),
+        viewsHtmlWebpackPluginOptions[pageName]||{}
+    )))
+})
+
+
 module.exports = {
     entry,
     output: {

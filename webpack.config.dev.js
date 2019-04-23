@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.config.common.js');
 const webpack = require('webpack');
+
 const os=require('os');
 let iptable={},ifaces=os.networkInterfaces();
 for (var dev in ifaces) {
@@ -12,6 +13,13 @@ for (var dev in ifaces) {
 }
 const locationIp = Object.values(iptable)[0]
 
+
+// 页面配置
+const {
+    pagesDirPath
+} = require('./views.config.js'); 
+
+
 module.exports = merge(common, {
     mode:'development',
     devtool: 'inline-source-map',
@@ -20,7 +28,7 @@ module.exports = merge(common, {
     },
     devServer:{
         // 告诉服务器从哪里提供内容,默认情况下，将使用当前工作目录作为提供内容的目录，但是你可以修改为其他目录：
-        contentBase: './src/pages/',
+        contentBase: pagesDirPath,
         hot: true,
         host: locationIp ,
         watchContentBase: true
