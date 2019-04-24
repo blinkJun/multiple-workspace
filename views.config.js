@@ -13,6 +13,8 @@ module.exports = {
         template:path.resolve( __dirname, './scss.template.mustache' ),
         baseImagesPath:'@/images/'
     },
+    // 需要分别打包的第三方包
+    cachePackages:['lodash','axios'],
     // 默认htmlWebpackPlugin配置
     baseHtmlWebpackPluginOptions:{
         favicon:path.resolve(__dirname,'./favicon.ico'),

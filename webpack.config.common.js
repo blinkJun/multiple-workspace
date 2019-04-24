@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 页面配置
 const {
     pagesDirPath,
+    cachePackages,
     baseHtmlWebpackPluginOptions,
     viewsHtmlWebpackPluginOptions
 } = require('./views.config.js'); 
@@ -73,6 +74,16 @@ const viewsHtmlWebpackPluginList = htmlList.map(item=>{
         viewsHtmlWebpackPluginOptions[pageName]||{}
     )))
 })
+// 获取需要缓存的分离出来的第三方插件配置
+const cacheGroups = {};
+cachePackages.forEach(item=>{
+    cacheGroups[item]={
+        test:new RegExp(item),
+        name: item,
+        chunks: "all",
+        minChunks :2 // 至少被引用2次的第三方包
+    }
+})
 
 
 module.exports = {
@@ -104,17 +115,14 @@ module.exports = {
         ...viewsHtmlWebpackPluginList,
     ],
     // 打包分离来自node_modules的第三方包
-    // optimization:{
-    //     splitChunks:{
-    //         cacheGroups: {
-    //             commons: {
-    //                 test: /[\\/]node_modules[\\/]/,
-    //                 name: "vendors",
-    //                 chunks: "all"
-    //             }
-    //         }
-    //     }
-    // },
+    optimization:{
+        splitChunks:{
+            cacheGroups
+        },
+        runtimeChunk: {
+            name: 'manifest'
+        }
+    },
     module: {
         rules: [
             // css
@@ -189,7 +197,14 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            // 处理html内资源 与html-webpack-plugin的语法冲突，不再使用
+            // {
+            //     test: /\.html$/,
+            //     use: {
+            //         loader: 'html-loader'
+            //     }
+            // }
         ]
     }
 }
