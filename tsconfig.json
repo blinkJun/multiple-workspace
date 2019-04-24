@@ -6,6 +6,7 @@
         "target": "es5",
         "allowJs": true,
         "baseUrl": ".",
+        "moduleResolution": "node",
         "paths": {
             "@/*": [
                 "src/*"
@@ -16,5 +17,5 @@
         "node_modules",
         "./dist/**/*",
         "*.js"
-    ]
+    ],
 }
