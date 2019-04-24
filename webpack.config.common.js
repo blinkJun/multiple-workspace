@@ -29,6 +29,7 @@ function readDirHtmlListSync(pagesDirPath) {
             let chunksPaths = pageDirFileList.filter(item=>/\.js|\.ts/g.test(item))
             let htmlPaths  = pageDirFileList.filter(item=>/\.html|\.htm/g.test(item))
             let pageInfo = {};
+            // 页面文件夹下存在js或ts文件则作为页面的脚本
             if(chunksPaths.length>0){
                 pageInfo.chunks=chunksPaths.map(item=>{
                     let nameItems =  item.split('.')
@@ -39,7 +40,10 @@ function readDirHtmlListSync(pagesDirPath) {
                         path:pageDirPath+'\\'+item
                     }
                 })
+            }else{
+                pageInfo.chunks=[]
             }
+            // 页面文件夹下页面的数量必须大于0才会作为页面信息录入
             if(htmlPaths.length>0){
                 const htmlIndex = htmlPaths[0]
                 let pageNameItems =  htmlIndex.split('.')
@@ -50,8 +54,8 @@ function readDirHtmlListSync(pagesDirPath) {
                     pageName:pageName,
                     path:pageDirPath+'\\'+htmlIndex,
                 }
+                htmlList.push(pageInfo)
             }
-            htmlList.push(pageInfo)
         }
     })
     // 将html文件路径进行返回
@@ -164,7 +168,7 @@ module.exports = {
             },
             // 处理图片资源
             {
-                test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
+                test: /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/,
                 use: [
                     {
                         loader: 'file-loader',

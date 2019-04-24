@@ -11,7 +11,8 @@ module.exports = {
             scss:path.resolve( __dirname, './src/style' ),
         },
         template:path.resolve( __dirname, './scss.template.mustache' ),
-        baseImagesPath:'@/images/'
+        // css-loader默认把url给修改为相对路径，加上~防止别名被转换
+        baseImagesPath:'~@/images/'
     },
     // 需要分别打包的第三方包
     cachePackages:['lodash','axios'],
@@ -20,9 +21,37 @@ module.exports = {
         favicon:path.resolve(__dirname,'./favicon.ico'),
         meta:{
             'a':{
+                name:'viewport',
+                content:'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+            },
+            'b':{
                 name:'apple-mobile-web-app-capable',
                 content:'yes'
             },
+            'c':{
+                name:'apple-mobile-web-app-status-bar-style',
+                content:'black-translucent'
+            },
+            'd':{
+                name:'screen-orientation',
+                content:'portrait'
+            },
+            'e':{
+                name:'x5-orientation',
+                content:'portrait'
+            },
+            'f':{
+                name:'format-detection',
+                content:'telephone=no'
+            },
+            'g':{
+                name:'description',
+                content:'panda'
+            },
+            'h':{
+                name:'keywords',
+                content:'panda,panpan'
+            }
         }
     },
     // 各个html页面可扩展的htmlwebpackPlugin配置
@@ -30,16 +59,8 @@ module.exports = {
         index:{
             meta:{
                 'a':{
-                    name:'apple-mobile-web-app-capable',
-                    content:'no'
-                },
-            }
-        },
-        app:{
-            meta:{
-                'a':{
-                    name:'apple-mobile-web-app-capable',
-                    content:'no'
+                    name:'viewport',
+                    content:'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
                 },
             }
         }
