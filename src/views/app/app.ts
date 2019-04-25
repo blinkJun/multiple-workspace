@@ -5,4 +5,5 @@ console.log(config.host)
 console.log(_.add)
 console.log(axios)
 const host = config.host
+console.log(host)
 

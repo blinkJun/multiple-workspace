@@ -146,6 +146,16 @@ module.exports = {
             },
             // 处理脚本文件
             {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    }
+                },
+            },
+            {
                 test: /\.tsx?$/,
                 use: [
                     { loader: 'cache-loader' },
