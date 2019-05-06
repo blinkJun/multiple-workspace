@@ -137,11 +137,11 @@ module.exports = {
                         loader: 'style-loader',
                     },
                     {
-                        loader:'postcss-loader'
+                        loader: 'css-loader',
                     },
                     {
-                        loader: 'css-loader',
-                    }
+                        loader:'postcss-loader'
+                    },
                 ]
             },
             // 处理脚本文件
