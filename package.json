@@ -9,7 +9,8 @@
     "build": "gulp sprite && webpack --config webpack.config.prod.js",
     "serve": "webpack-dev-server --config webpack.config.dev.js",
     "start": "webpack-dev-server --open --config webpack.config.dev.js",
-    "sprite": "gulp sprite"
+    "sprite": "gulp sprite",
+    "minImages": "gulp minImages"
   },
   "keywords": [
     "workspace"
@@ -19,10 +20,9 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "babel-loader": "^8.0.0-beta.0",
-    "vconsole": "^3.3.0",
     "@types/lodash": "^4.14.123",
     "autoprefixer": "^9.5.1",
+    "babel-loader": "^8.0.0-beta.0",
     "cache-loader": "^2.0.1",
     "clean-webpack-plugin": "^2.0.1",
     "copy-webpack-plugin": "^5.0.2",
@@ -32,6 +32,7 @@
     "file-loader": "^3.0.1",
     "fork-ts-checker-webpack-plugin": "^1.0.2",
     "gulp": "^4.0.0",
+    "gulp-tinypng-nokey": "^1.1.0",
     "gulp.spritesmith": "^6.9.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^4.0.0-beta.5",
@@ -43,6 +44,8 @@
     "thread-loader": "^2.1.2",
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.3",
+    "vconsole": "^3.3.0",
+    "vinyl-buffer": "^1.0.1",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.1",

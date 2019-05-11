@@ -14,6 +14,11 @@ module.exports = {
         // css-loader默认把url给修改为相对路径，加上~防止别名被转换
         baseImagesPath:'~@/images/'
     },
+    // 压缩图片配置 (建议打包成功后根据情况压缩图片，此配置为模拟网页https://tinypng.com/中的上传压缩，速度跟网络有关)
+    minImages:{
+        entry:['*.png','*.jpg','*.jpeg','*.gif'].map(item=>path.resolve( __dirname, `./dist/img/**/${item}` )),
+        outPut:path.resolve( __dirname, "./dist/img/" )
+    },
     // 需要分别打包的第三方包
     cachePackages:['lodash','axios'],
     // 默认htmlWebpackPlugin配置

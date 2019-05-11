@@ -3,8 +3,10 @@ const path = require('path')
 
 const gulp = require("gulp");
 const spritesmith = require('gulp.spritesmith');
+const buffer = require('vinyl-buffer');
+const imagemin = require('gulp-tinypng-nokey');
 
-const {sprites} = require('./views.config')
+const {sprites,minImages} = require('./views.config')
 const sptieDir = sprites.entry
 const outPut = sprites.outPut
 const template = sprites.template
@@ -34,5 +36,14 @@ gulp.task('sprite', function (done) {
             spriteData.css.pipe(gulp.dest(outPut.scss));
         }
     })
+    done()
+});
+
+// 压缩图片
+gulp.task('minImages', function (done) {
+    gulp.src(minImages.entry)
+    .pipe(buffer())
+    .pipe(imagemin())
+    .pipe(gulp.dest(minImages.outPut));
     done()
 });
