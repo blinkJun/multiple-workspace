@@ -34,7 +34,7 @@ function readDirHtmlListSync(pagesDirPath) {
                 pageInfo.chunks=chunksPaths.map(item=>{
                     let nameItems =  item.split('.')
                     nameItems.reverse().shift()
-                    const name  = nameItems.join('')
+                    const name  = nameItems.join('.')
                     return {
                         name:name,
                         path:pageDirPath+'\\'+item
@@ -46,12 +46,11 @@ function readDirHtmlListSync(pagesDirPath) {
             // 页面文件夹下页面的数量必须大于0才会作为页面信息录入
             if(htmlPaths.length>0){
                 const htmlIndex = htmlPaths[0]
-                let pageNameItems =  htmlIndex.split('.')
-                pageNameItems.reverse().shift()
-                const pageName  = pageNameItems.join('')
                 pageInfo.html={
-                    name:htmlIndex,
-                    pageName:pageName,
+                    // 使用文件夹名称作为html文件名
+                    name:`${ele}.html`,
+                    // 使用文件夹名称作为页面名，viewsHtmlWebpackPluginOptions中可使用此文件夹名称进行配置信息
+                    pageName:ele,
                     path:pageDirPath+'\\'+htmlIndex,
                 }
                 htmlList.push(pageInfo)
