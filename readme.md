@@ -7,35 +7,6 @@
 5. 使用gulp单独生成精灵图片和图标样式scss
 6. 压缩打包完成后的图片
 
-## 使用方式
-
-### 修改为自己的git目录
-
-##### 下载裸版本库
-
-```shell
-    git clone --bare git://github.com/username/project.git
-``` 
-
-##### 推送到自己创建的版本库
-```shell
-    cd project.git
-    git push --mirror git@gitcafe.com/username/newproject.git
-```
-##### 删除本地代码
-```shell
-    cd ..
-    rm -rf project.git
-```
-##### 下载自己创建的版本库
-```shell
-    git clone git@gitcafe.com/username/newproject.git
-```
-
-#### 或者在推送前把推送的目标地址改为自己的仓库地址
-```shell
-    git remote set-url origin git@gitcafe.com/username/newproject.git
-```
  
 ## 页面打包约定
     
