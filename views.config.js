@@ -20,7 +20,7 @@ module.exports = {
         outPut:path.resolve( __dirname, "./dist/img/" )
     },
     // 需要分别打包的第三方包
-    cachePackages:['lodash','axios'],
+    cachePackages:['axios'],
     // 默认htmlWebpackPlugin配置
     baseHtmlWebpackPluginOptions:{
         favicon:path.resolve(__dirname,'./favicon.ico'),
