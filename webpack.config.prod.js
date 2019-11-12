@@ -3,6 +3,8 @@ const common = require('./webpack.config.common.js');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
 
+const NODE_ENV = process.env.NODE_ENV || 'production'
+
 module.exports = merge(common, {
     mode:'production',
     module: {
@@ -50,7 +52,7 @@ module.exports = merge(common, {
         new ExtractTextPlugin('css/[name].[hash].css'),
         // 在脚本中定义变量
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
+            'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
         })
     ],
 })
