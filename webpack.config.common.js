@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 // 页面配置
 const {
@@ -104,6 +105,8 @@ module.exports = {
         }
     },
     plugins:[
+        // vue组件插件
+        new VueLoaderPlugin(),
         // 清理掉输出文件夹
         new CleanWebpackPlugin(),
         // 复制图标
@@ -128,6 +131,11 @@ module.exports = {
     },
     module: {
         rules: [
+            // vue组件处理
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
             // css
             {
                 test: /\.css$/,
@@ -168,6 +176,7 @@ module.exports = {
                     {
                         loader: 'ts-loader',
                         options: {
+                            appendTsSuffixTo: [/\.vue$/],
                             transpileOnly: true,
                             happyPackMode: true // IMPORTANT! use happyPackMode mode to speed-up compilation and reduce errors reported to webpack
                         }
