@@ -2,6 +2,7 @@
     <div class="app" >
         {{title}}
         <img src="@/images/icons.png" alt="">
+        <Button type="primary" >view-design import</Button>
     </div>
 </template>
 
